@@ -21,7 +21,7 @@ public class SendMailImages {
 
         // Cargar archivo de configuración SMTP
         Properties props = new Properties();
-        try (FileInputStream input = new FileInputStream("C:\\Users\\VSPC-BLACKFRIDAY\\Desktop\\PSP\\SendMailSMTP\\src\\main\\resources\\smtp.properties")) {
+        try (FileInputStream input = new FileInputStream("src\\main\\resources\\smtp.properties")) {
             props.load(input);
         } catch (IOException e) {
             e.printStackTrace();
@@ -42,15 +42,17 @@ public class SendMailImages {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(sender, "Name1 Surnames1"));
 
-            // Agregar múltiples destinatarios
+            // Agregar destinatarios
             for (String receiver : receivers) {
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(receiver, "Name2 Surnames2"));
+                message.addRecipient(Message.RecipientType.TO,  new InternetAddress(receiver, "Name2 Surnames2"));
             }
+
+            message.addRecipient(Message.RecipientType.CC, new InternetAddress("berto@yopmail.com"));
 
             message.setSubject("Hello from Java");
             message.setText("Email sent from Java app and captured by Mailslurper.");
 
-            // Crear el cuerpo del mensaje en formato HTML
+            // Generar un ID único para la imagen
 
             String cid = UUID.randomUUID().toString();
 
@@ -65,7 +67,7 @@ public class SendMailImages {
                     "        body {\n" +
                     "            font-family: Arial, sans-serif;\n" +
                     "            line-height: 1.6;\n" +
-                    "            color: pink;\n" +
+                    "            color: green;\n" +
                     "        }\n" +
                     "        img {\n" +
                     "            max-width: 100%; /* Ajusta el tamaño automáticamente sin sobrepasar el contenedor */\n" +
@@ -112,23 +114,24 @@ public class SendMailImages {
                     "</html>";
             bodyPart.setContent(htmlContent, "text/html");
 
-            MimeBodyPart imagePart = new MimeBodyPart(); imagePart.attachFile(new File("C:\\Users\\VSPC-BLACKFRIDAY\\Desktop\\PSP\\SendMailSMTP\\src\\main\\resources\\professionals.png"));
+            // Adjuntar la imagen que va incrustada en el mail y asociarla al ID generado
+            MimeBodyPart imagePart = new MimeBodyPart(); imagePart.attachFile(new File("src\\main\\resources\\professionals.png"));
             imagePart.setContentID("<" + cid + ">");
             imagePart.setDisposition(MimeBodyPart.INLINE);
 
-            // Adjuntar archivo
+            // Archivo adjunto
             MimeBodyPart filePart = new MimeBodyPart();
-            filePart.attachFile(new File("C:\\Users\\VSPC-BLACKFRIDAY\\Desktop\\PSP\\SendMailSMTP\\src\\main\\resources\\smtp.properties"));
+            filePart.attachFile(new File("src\\main\\resources\\smtp.properties"));
             filePart.setDisposition(MimeBodyPart.INLINE);
 
-            // Crear multipart para contener cuerpo y archivo adjunto
+            // Crear el multipart para las partes del mail
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(filePart);
             multipart.addBodyPart(imagePart);
             multipart.addBodyPart(bodyPart);
             message.setContent(multipart);
 
-            // Enviar el mensaje
+            // Envío
             Transport.send(message);
             System.out.println("Email sent.");
         } catch (MessagingException e) {
