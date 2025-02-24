@@ -94,7 +94,7 @@ Pam
 
                 // Generar un ID único para la imagen
 
-                File file=new File("C:\\Users\\a23albertogc\\Desktop\\PSP\\SendEmailTLS\\src\\main\\resources\\transports.png");
+                File file=new File("src\\main\\resources\\transports.png");
                 FileInputStream imageInFile=new FileInputStream(file);
                 byte imageData[]=new byte[(int)file.length()];
                 imageInFile.read(imageData);
