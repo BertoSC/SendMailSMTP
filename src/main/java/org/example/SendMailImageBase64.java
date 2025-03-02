@@ -55,7 +55,7 @@ Pam
 */
 
             final String username = "bbertosmtp@gmail.com";
-            final String password = "oumi qvhg rbtm xona"; // Usa una contraseña de aplicación si tienes 2FA habilitado
+            final String password = ""; // Usa una contraseña de aplicación si tienes 2FA habilitado
             String sender = "bbertosmtp@gmail.com";
             String[] receivers = {"galiciano83@hotmail.com", "bbertosmtp@gmail.com"}; // Lista de destinatarios
 
